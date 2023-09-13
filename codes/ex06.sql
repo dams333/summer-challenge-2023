@@ -1,3 +1,4 @@
+-- Pre-compute all classes with free-time during theft
 WITH classesAvailable AS (
         SELECT
             class.classId AS classId
@@ -22,7 +23,7 @@ SELECT
     -- Check chat creations in the last week
     WHERE onlineChat.createdAt > DATEADD('DAY', -7, CURRENT_DATE)
 
-    -- Check user count = 7
+    -- Check the chat contains 7 users
     AND
     (
         SELECT
@@ -34,7 +35,7 @@ SELECT
         GROUP BY userCounter.chatId
     ) = 7
 
-    -- Check all user has grade > median
+    -- Check all user are better than the median
     AND
     (
         SELECT
@@ -52,7 +53,7 @@ SELECT
         )
     ) = 7
 
-    -- Check 3 users are not in class
+    -- Check 3 users are not in class during theft
     AND
     (
         SELECT
@@ -66,7 +67,7 @@ SELECT
         AND studentObj.classId IN (SELECT classId FROM classesAvailable)
     ) >= 3
 
-    -- Check 2 are bigs
+    -- Check 2 users are bigs
     AND
     (
         SELECT
@@ -80,7 +81,7 @@ SELECT
         AND studentObj.height > 320
     ) = 2
 
-    -- Check 3 in the same room
+    -- Check 3 users are in the same room
     AND
     (
         SELECT COUNT(*)
@@ -98,7 +99,7 @@ SELECT
         AND subquery.inSameBedroom = 3
     ) > 0
 
-    -- Check one has long time in chemistry room
+    -- Check one user has long time in chemistry room
     AND
     (
         SELECT
@@ -115,6 +116,7 @@ SELECT
         AND room.roomName = 'Chemistry supply room'
     ) > 60
 
+    -- Check one user has a W and a M
     AND 
     (
         SELECT
@@ -128,5 +130,3 @@ SELECT
         AND LOCATE('w', LOWER(studentObj.name)) != 0
         AND LOCATE('m', LOWER(studentObj.name)) != 0
     ) > 0
-
-    ORDER BY studentsChatsMap.chatId ASC
