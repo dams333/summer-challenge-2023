@@ -17,7 +17,7 @@ Timeout on the last test
 Ok !
 
 ## Ex07
-DNF
+Ok !
 
 ## Ex08
 Just ex04 updated code
